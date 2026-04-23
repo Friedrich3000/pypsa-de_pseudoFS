@@ -5746,6 +5746,12 @@ if __name__ == "__main__":
         }
     )
 
+    # For export to the Ariadne-internal DB, convert most Wh-based entries to J
+    ariadne_df.loc[ariadne_df["Unit"] == "TWh/yr", planning_horizons] *= 3.6
+    ariadne_df.loc[ariadne_df["Unit"] == "TWh/yr", "Unit"] = "PJ/yr"
+    ariadne_df.loc[ariadne_df["Unit"] == "EUR2020/MWh", planning_horizons] /= 3.6
+    ariadne_df.loc[ariadne_df["Unit"] == "EUR2020/MWh", "Unit"] = "EUR2020/GJ"
+
     with pd.ExcelWriter(snakemake.output.exported_variables) as writer:
         ariadne_df.round(5).to_excel(writer, sheet_name="data", index=False)
         meta.to_frame().T.to_excel(writer, sheet_name="meta", index=False)
