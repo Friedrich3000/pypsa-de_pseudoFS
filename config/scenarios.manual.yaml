@@ -2,6 +2,10 @@
 # SPDX-FileCopyrightText: : 2017-2023 The PyPSA-Eur Authors
 #
 # SPDX-License-Identifier: MIT
+# KN2045_Mix_HighDecentralDiscount_GasCrisis: # Gas bis 2025 auf 55€/MWh, CCGT und OCGT teurer
+#  costs:
+#    custom_cost_fn: data/pypsa-de/custom_costs_nep_2023_high_decentral_discount_GasCrisis.csv
+
 ExPol:
 # UBA CO2 pathway instead of KSG targets
 # Europen CO2 pathway fixed at 2030 for 2035-2050
@@ -81,6 +85,38 @@ KN2045_Mix_LowDecentralDiscount:
 KN2045_Mix_HighDecentralDiscount:
   costs:
     custom_cost_fn: data/pypsa-de/custom_costs_nep_2023_high_decentral_discount.csv
+  
+  
+KN2045_Mix_HDD_pseudo_foresight: #HDD = HighDecentralDiscount nur mit max. Kapazitäten von 2045, um perfect foresight zu approximieren
+  costs:
+    custom_cost_fn: data/pypsa-de/custom_costs_nep_2023_high_decentral_discount.csv  
+  
+  solving:
+    constraints:
+      limits_capacity_max: 
+        Link:
+          "urban central gas CHP": # from run highDecentralDiscount, 2045-capacities as upper limit to approximate perfect foresight
+            DE:
+              2030: 15.04
+              2035: 15.04
+              2040: 15.04
+              2045: 15.04
+              2050: 15.04
+        Generator: 
+          CCGT:
+            DE:
+              2030: 11.04
+              2035: 11.04
+              2040: 11.04
+              2045: 11.04
+              2050: 11.04
+          OCGT:
+            DE:
+              2030: 0.31
+              2035: 0.31
+              2040: 0.31
+              2045: 0.31
+              2050: 0.31
 
 KN2045_Mix_H2plantsEU:
   electricity:
@@ -204,7 +240,7 @@ KN2045_H2:
             2040: 0
             2045: 200
             2050: 200
-
+      
   industry:
     steam_biomass_fraction: 0.4
     steam_hydrogen_fraction: 0.5
