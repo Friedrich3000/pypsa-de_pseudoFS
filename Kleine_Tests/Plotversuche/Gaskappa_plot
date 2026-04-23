@@ -1,0 +1,35 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+path = r"c:\Users\ThinkPad\Nextcloud\Studium\Masterarbeit\Code\Eigene daten\Gas_H2_Kapa_PypSA_Mix_25-45.csv"
+df = pd.read_csv(path)
+
+df = df[df["unit"] == "GW"]
+years = [c for c in df.columns if c.isdigit()]
+
+pv = df.pivot_table(index="variable", values=years, aggfunc="sum")
+
+gas_mask = pv.index.str.contains("Gas", regex=False)
+hyd_oc_mask = pv.index.str.contains("Hydrogen", regex=False) & pv.index.str.contains("OC", regex=False)
+hyd_cc_mask = pv.index.str.contains("Hydrogen", regex=False) & pv.index.str.contains("CC", regex=False)
+
+gas = pv.loc[gas_mask, years].sum(axis=0)
+hyd_oc = pv.loc[hyd_oc_mask, years].sum(axis=0)
+hydrogen = pv.loc[hyd_cc_mask, years].sum(axis=0)
+
+plot_df = pd.DataFrame({
+    "Gas": gas,
+    "H2 OC": hyd_oc,
+    "H2 CC": hydrogen,
+}, index=years).astype(float)
+
+plt.figure(figsize=(10, 6))
+colors = ["orange", "#00b7c2", "#0099a8"]
+plot_df.plot.area(color=colors, alpha=0.85)
+plt.title("Kapazitätsentwicklung im Szenario Technologiemix")
+plt.xlabel("Jahr")
+plt.ylabel("Kapazität (GW)")
+plt.legend(title="Technologie")
+plt.grid(axis="y", alpha=0.3)
+plt.tight_layout()
+plt.show()

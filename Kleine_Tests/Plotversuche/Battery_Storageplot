@@ -1,0 +1,48 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from pathlib import Path
+
+# Ordner mit den CSV-Dateien
+base_path = Path(r"C:\Users\ThinkPad\Nextcloud\Studium\Masterarbeit\Code\pypsa-de\data\costs\primary\v0.14.0-2020")
+
+years = [2025, 2030, 2035, 2040, 2050]
+
+# Energiekomponente (€/kWh in 2020 Preisen)
+energy_component = [95, 65, 55, 54.6, 54]
+
+values = []
+unit = None
+
+for year in years:
+    file = base_path / f"costs_{year}.csv"
+    
+    df = pd.read_csv(file)
+    
+    row = df[
+        (df["technology"] == "battery storage") &
+        (df["parameter"] == "investment")
+    ]
+    
+    if row.empty:
+        values.append(None)
+    else:
+        values.append(row["value"].iloc[0])
+        unit = row["unit"].iloc[0]
+
+# Plot
+plt.figure()
+
+# Gesamtinvestition
+plt.plot(years, values, marker="o", label="Gesamtinvestition")
+
+# Energiekomponente
+plt.plot(years, energy_component, marker="o", label="Eneriekomponente")
+
+plt.ylabel("Investition [€2020/kWh]")
+plt.title("BESS Kostenprojektion DEA")
+
+plt.legend()
+plt.grid(True)
+
+plt.savefig("battery_storage_investment.png", dpi=300, bbox_inches="tight")
+plt.show()

@@ -1,0 +1,105 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from io import StringIO
+
+# ---- CSV einlesen (hier einfach dein Text einfügen) ----
+# Entweder Pfad zur CSV oder ein CSV-Inhalt als Text
+import os
+
+data = r"C:\Users\ThinkPad\Nextcloud\Studium\Masterarbeit\Code\Eigene daten\Erneuerbare_kapas_PyPSA_Alle.csv"
+
+if os.path.exists(data):
+    df = pd.read_csv(data)
+else:
+    df = pd.read_csv(StringIO(data))
+
+if "variable" not in df.columns:
+    raise ValueError("Spalte 'variable' fehlt in der CSV: gefundene Spalten sind " + ",".join(df.columns))
+
+# ---- Jahr auswählen ----
+year = "2045"
+
+# ---- relevante Technologien filtern ----
+df = df[df["variable"].str.contains("Capacity|Electricity|Biomass", case=False, regex=True)]
+
+# ---- Aggregation ----
+grouped = (
+    df.groupby(["scenario", "variable"])[year]
+    .sum()
+    .unstack(fill_value=0)
+)
+
+# Sortiere Szenarien:
+try:
+    grouped = grouped.loc[sorted(grouped.index)]
+except Exception:
+    pass
+
+labels = grouped.index.tolist()
+
+# ---- Plot ----
+fig, ax = plt.subplots(figsize=(12,7))
+
+x = range(len(grouped))
+
+# Stapeln nach Variable
+bottom = [0] * len(grouped)
+
+# Mapping für Legenden-Labels (exakte Variablenbezeichnungen aus der Anfrage)
+legend_map = {
+    "capacity|electricity|wind|onshore": "Wind Onshore",
+    "capacity|electricity|wind|offshore": "Wind Offshore",
+    "capacity|electricity|solar|pv|rooftop": "Solar Aufdach",
+    "capacity|electricity|solar|pv|open field": "Solar Freifläche",
+    "capacity|electricity|hydro": "Wasserkraft",
+    "capacity|electricity|biomass": "Biomasse",
+}
+
+color_map = {
+    "Solar Freifläche": "#FFD700",  # gelb gold
+    "Solar Aufdach": "#FFEB3B",    # hellgelb
+    "Wind Onshore": "#1E90FF",     # blau
+    "Wind Offshore": "#4682B4",    # dunkleres blau
+    "Wasserkraft": "#4EC9C1",      # türkis
+    "Biomasse": "#006400",         # tiefgrün
+}
+for i, var in enumerate(grouped.columns):
+    y = grouped[var].values
+    normalized = var.strip().lower()
+    legend_label = legend_map.get(normalized)
+
+    if legend_label is None:
+        # Fallback, falls kleine Variationen auftreten
+        if "hydro" in normalized:
+            legend_label = "Wasserkraft"
+        elif "biomass" in normalized:
+            legend_label = "Biomasse"
+        elif "wind" in normalized and "offshore" in normalized:
+            legend_label = "Wind Offshore"
+        elif "wind" in normalized and "onshore" in normalized:
+            legend_label = "Wind Onshore"
+        elif "solar" in normalized and "rooftop" in normalized:
+            legend_label = "Solar Aufdach"
+        elif "solar" in normalized:
+            legend_label = "Solar Freifläche"
+        else:
+            legend_label = var
+
+    color = color_map.get(legend_label, plt.rcParams["axes.prop_cycle"].by_key()["color"][i % len(plt.rcParams["axes.prop_cycle"].by_key()["color"])])
+
+    ax.bar(x, y, bottom=bottom, label=legend_label, color=color)
+    bottom = [b + yi for b, yi in zip(bottom, y)]
+
+# Achsen & Labels
+ax.set_xticks(x)
+ax.set_xticklabels(labels, rotation=0, ha="center")
+
+ax.set_ylabel("Kapazität [GW]")
+ax.set_title(f"Erneuerbare Erzeugungsleistung nach Szenario {year}", fontsize=18)
+
+ax.legend(bbox_to_anchor=(1.04, 1), loc="upper left")
+ax.grid(axis="y")
+
+plt.tight_layout()
+plt.show()
+
