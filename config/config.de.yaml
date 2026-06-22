@@ -4,7 +4,7 @@
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#run
 run:
-  prefix: 20260607_ref_noH2_Force_upstream
+  prefix: 20260622_ref_noH2_Force_upstream
   name:
   # - ExPol
   # - KN2045_Mix
@@ -424,7 +424,7 @@ industry:
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#solving
 solving:
   runtime: 12h
-  mem_mb: 70000 #30000 is OK for 22 nodes, 365H; 140000 for 22 nodes 3H; 400000 for 44 nodes 3H
+  mem_mb: 140000 #30000 is OK for 22 nodes, 365H; 140000 for 22 nodes 3H; 400000 for 44 nodes 3H
   options:
     transmission_losses: true
     custom_extra_functionality: "../scripts/pypsa-de/additional_functionality.py"
