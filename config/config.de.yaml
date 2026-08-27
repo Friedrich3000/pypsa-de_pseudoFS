@@ -7,7 +7,7 @@ run:
   prefix: 20260825_merge_master_aug_26
   name:
   # - ExPol
-  # - KN2045_Mix
+  - KN2045_Mix
   # - KN2045_Mix_LowDecentralDiscount
   # - KN2045_Mix_HDD_Upstream
   # - KN2045_Mix_HighDecentralDiscount_GasCrisis
@@ -24,7 +24,7 @@ run:
   # - KN2045_NFhoch
   scenarios:
     enable: true
-    manual_file: config/scenarios.report.2026.yaml
+    manual_file: config/scenarios.manual.yaml
     file: config/scenarios.automated.yaml
   shared_resources:
     policy: base #stops recalculating
@@ -42,8 +42,8 @@ pypsa-de:
     general: REMIND-EU v1.1
     transport: Aladin v1
     industry: FORECAST v1.0
-  use_internal_db: true
-  reference_scenario: KN2045_Bal_v5
+  use_internal_db: false
+  reference_scenario: KN2045_Mix
   region: Deutschland
   uba_for_mobility: # Available for 2020–2035; uses AGEB/KBA for 2020-2025 and MWMS scenario from UBA Projektionsbericht 2025 for 2030-2035
   - 2025
