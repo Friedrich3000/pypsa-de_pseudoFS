@@ -336,7 +336,7 @@ rule modify_industry_production:
     log:
         logs("modify_industry_production_{planning_horizons}.log"),
     resources:
-        mem_mb=1000,
+        mem_mb=8000,
     params:
         reference_scenario=config_provider("pypsa-de", "reference_scenario"),
     script:
