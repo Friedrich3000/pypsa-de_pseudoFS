@@ -687,7 +687,7 @@ rule process_cost_data:
         benchmarks("build_cost_data_{planning_horizons}")
     threads: 1
     resources:
-        mem_mb=4000,
+        mem_mb=8000,
     params:
         costs=config_provider("costs"),
         max_hours=config_provider("electricity", "max_hours"),

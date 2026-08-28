@@ -844,7 +844,7 @@ rule build_co2_totals:
         benchmarks("build_co2_totals")
     threads: 1
     resources:
-        mem_mb=1000,
+        mem_mb=4000,
     params:
         countries=config_provider("countries"),
         energy=config_provider("energy"),
@@ -863,7 +863,7 @@ rule build_transformation_output_coke:
         benchmarks("build_transformation_output_coke")
     threads: 1
     resources:
-        mem_mb=1000,
+        mem_mb=4000,
     script:
         scripts("build_transformation_output_coke.py")
 
@@ -960,7 +960,7 @@ rule build_biomass_potentials:
         benchmarks("build_biomass_potentials_s_{clusters}_{planning_horizons}")
     threads: 8
     resources:
-        mem_mb=2000,
+        mem_mb=8000,
     params:
         biomass=config_provider("biomass"),
     message:
@@ -1112,7 +1112,7 @@ rule build_industry_sector_ratios_intermediate:
         ),
     threads: 1
     resources:
-        mem_mb=4000,
+        mem_mb=8000,
     log:
         logs("build_industry_sector_ratios_{planning_horizons}.log"),
     benchmark:
@@ -1140,7 +1140,7 @@ rule build_industrial_production_per_country:
         ),
     threads: 8
     resources:
-        mem_mb=4000,
+        mem_mb=8000,
     log:
         logs("build_industrial_production_per_country.log"),
     benchmark:
