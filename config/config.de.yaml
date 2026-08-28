@@ -4,7 +4,7 @@
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#run
 run:
-  prefix: 20260828_no_early_GT
+  prefix: 20260828_no_early_GT_V1
   name:
   # - ExPol
   - KN2045_Mix
@@ -14,10 +14,10 @@ run:
   # - KN2045_Mix_HDD_pseudo_foresight
   # - KN2045_2026
   # - KN2045_2023
-  # - endoretro
-  # - endoretro_high_GT_cost
-  # - endoretro_lowBiogas
-  # - endoretro_upstream
+  - endoretro
+  - endoretro_high_GT_cost
+  - endoretro_lowBiogas
+  - endoretro_upstream
   # - KN2045_Elek
   # - KN2045_H2
   # - KN2045_NFniedrig
@@ -86,6 +86,10 @@ scenario:
   - none
   planning_horizons:
   - 2025
+  - 2030
+  - 2035
+  - 2040
+  - 2045
   - 2050
 
 existing_capacities:
@@ -250,7 +254,7 @@ clustering:
     'ES': 0.0408
     'IT': 0.0408
   temporal:
-    resolution_sector: 365H
+    resolution_sector: 3H
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#co2-budget
 co2_budget:
@@ -426,7 +430,7 @@ industry:
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#solving
 solving:
   runtime: 12h
-  mem_mb: 140000 #30000 is OK for 22 nodes, 365H; 140000 for 22 nodes 3H; 400000 for 44 nodes 3H
+  mem_mb: 400000 #30000 is OK for 22 nodes, 365H; 140000 for 22 nodes 3H; 400000 for 44 nodes 3H
   options:
     transmission_losses: true
     custom_extra_functionality: "../scripts/pypsa-de/additional_functionality.py"
@@ -712,7 +716,7 @@ electricity:
     enable: EU            # allowed values: false, DE, EU
     endogenous: true      # allowed values: true, false 
     start: 2030           # should be < force
-    force: 2055           # force year after last planning horizon leads to no retrofitting of H2 plants
+    force: 2045           # force year after last planning horizon leads to no retrofitting of H2 plants
     cost_factor: 0.15     # repurposing cost of OCGT gas to H2 in % investment cost in EUR/MW source: Christidis et al (2023) - H2-Ready-Gaskraftwerke, Table 3 https://reiner-lemoine-institut.de/wp-content/uploads/2023/11/RLI-Studie-H2-ready_DE.pdf
     efficiency_loss: 0.05
 
