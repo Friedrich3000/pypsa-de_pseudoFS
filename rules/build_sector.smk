@@ -58,7 +58,7 @@ rule build_clustered_solar_rooftop_potentials:
     benchmark:
         benchmarks("build_clustered_solar_rooftop_potentials/s_{clusters}")
     resources:
-        mem_mb=10000,
+        mem_mb=20000,
     message:
         "Building solar rooftop potentials for {wildcards.clusters} clusters"
     script:
