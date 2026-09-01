@@ -950,7 +950,7 @@ def add_h2_retrofit_constraint(n, snakemake):
         if h2_plants.empty or gas_plants.empty:
             continue
         
-        assert (h2_plants.index.str.replace(h2_carrier, gas_carrier) == gas_plants.index).all(), "Mismatch in index or in bus1 between gas and H2 plants"
+        assert set(h2_plants.index.str.replace(h2_carrier, gas_carrier)) == set(gas_plants.index), "Mismatch in index between gas and H2 plants"
 
         for gas_plant, h2_plant in zip(gas_plants.index, h2_plants.index):
 

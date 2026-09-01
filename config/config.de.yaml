@@ -7,16 +7,16 @@ run:
   prefix: 20260828_no_early_GT_V1
   name:
   # - ExPol
-  - KN2045_Mix
+  #- KN2045_Mix
   # - KN2045_Mix_LowDecentralDiscount
   # - KN2045_Mix_HDD_Upstream
   # - KN2045_Mix_HighDecentralDiscount_GasCrisis
   # - KN2045_Mix_HDD_pseudo_foresight
   # - KN2045_2026
   # - KN2045_2023
-  - endoretro
-  - endoretro_high_GT_cost
-  - endoretro_lowBiogas
+  #- endoretro
+  #- endoretro_high_GT_cost
+  #- endoretro_lowBiogas
   - endoretro_upstream
   # - KN2045_Elek
   # - KN2045_H2
