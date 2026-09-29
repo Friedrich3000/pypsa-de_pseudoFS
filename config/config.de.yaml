@@ -4,7 +4,7 @@
 
 # docs in https://pypsa-eur.readthedocs.io/en/latest/configuration.html#run
 run:
-  prefix: 20260828_no_early_GT_V1
+  prefix: 20260828_no_early_GT_V2
   name:
   # - ExPol
   #- KN2045_Mix
@@ -15,9 +15,9 @@ run:
   # - KN2045_2026
   # - KN2045_2023
   #- endoretro
-  #- endoretro_high_GT_cost
+  - endoretro_high_GT_cost
   #- endoretro_lowBiogas
-  - endoretro_upstream
+  # endoretro_upstream
   # - KN2045_Elek
   # - KN2045_H2
   # - KN2045_NFniedrig
